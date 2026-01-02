@@ -27,6 +27,7 @@ body {
   flex-direction: column;
   background: radial-gradient(1200px 600px at top, #1f1f1f, var(--bg));
   color: var(--text);
+  overflow-x: hidden;
 }
 
 /* HEADER */
@@ -45,14 +46,16 @@ header {
 
 /* MENU BUTTON */
 .menu-btn {
-  background: none;
-  border: none;
+  background: var(--panel);
+  border: 1px solid #2a2a2a;
+  border-radius: 12px;
+  padding: 8px;
   cursor: pointer;
 }
 
 .menu-btn img {
-  width: 28px;
-  height: 28px;
+  width: 26px;
+  height: 26px;
   filter: invert(90%);
 }
 
@@ -80,20 +83,21 @@ header {
   left: 24px;
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 14px;
 }
 
 .menu-panel a {
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 12px;
   color: var(--text);
   text-decoration: none;
   font-size: 1.1rem;
 }
 
-.menu-panel a span {
-  font-size: 1.3rem;
+.menu-panel img {
+  width: 22px;
+  height: 22px;
 }
 
 /* MAIN */
@@ -104,11 +108,12 @@ main {
 
 /* HERO */
 .hero {
-  min-height: calc(100vh - 140px);
   display: flex;
   flex-direction: column;
   justify-content: center;
+  align-items: center;
   text-align: center;
+  padding: 80px 20px;
 }
 
 .wavy {
@@ -135,6 +140,7 @@ main {
 }
 
 .hero button {
+  display: inline-flex;
   background: var(--yellow);
   color: #000;
   border: none;
@@ -146,7 +152,9 @@ main {
 
 /* INFO BAR */
 .info-bar {
-  margin-top: 60px;
+  margin-top: 64px;
+  width: 100%;
+  max-width: 1000px;
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
   gap: 24px;
@@ -237,8 +245,12 @@ footer {
 
 <div class="menu-overlay" id="menu">
   <div class="menu-panel">
-    <a href="#/" onclick="toggleMenu()"><span>🏠</span> home</a>
-    <a href="#/games" onclick="toggleMenu()"><span>🎮</span> games</a>
+    <a href="#/" onclick="toggleMenu()">
+      <img src="https://i.postimg.cc/SQGGBxHV/home-(1).png"> home
+    </a>
+    <a href="#/games" onclick="toggleMenu()">
+      <img src="https://i.postimg.cc/7ZhXMrsL/game-controller.png"> games
+    </a>
   </div>
 </div>
 
@@ -263,7 +275,7 @@ function getTime() {
   return new Date().toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'});
 }
 
-/* WEATHER (Open-Meteo) */
+/* WEATHER */
 navigator.geolocation.getCurrentPosition(pos => {
   const { latitude, longitude } = pos.coords;
   fetch(`https://api.open-meteo.com/v1/forecast?latitude=${latitude}&longitude=${longitude}&current_weather=true`)
