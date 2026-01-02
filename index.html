@@ -7,238 +7,217 @@
 
 <style>
 :root {
-  --bg: #121212;
-  --panel: #1a1a1a;
-  --card: #202020;
-  --yellow: #ffd84d;
-  --text: #f2f2f2;
-  --muted: #a0a0a0;
+  --bg:#121212;
+  --panel:#1a1a1a;
+  --yellow:#ffd84d;
+  --text:#f2f2f2;
+  --muted:#a0a0a0;
 }
 
-* {
-  box-sizing: border-box;
-  font-family: Inter, system-ui, sans-serif;
-}
+* { box-sizing:border-box; font-family:Inter,system-ui,sans-serif; }
 
 body {
-  margin: 0;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  background: radial-gradient(1200px 600px at top, #1f1f1f, var(--bg));
-  color: var(--text);
-  overflow-x: hidden;
+  margin:0;
+  min-height:100vh;
+  display:flex;
+  flex-direction:column;
+  background:radial-gradient(1200px 600px at top,#1f1f1f,var(--bg));
+  color:var(--text);
+  overflow-x:hidden;
 }
 
 /* HEADER */
 header {
-  display: flex;
-  align-items: center;
-  gap: 16px;
-  padding: 18px 24px;
-  position: relative;
-  z-index: 20;
+  display:flex;
+  align-items:center;
+  gap:16px;
+  padding:18px 24px;
 }
 
-.logo {
-  font-weight: 800;
-}
+.logo { font-weight:800; }
 
-/* MENU BUTTON */
+/* MENU */
 .menu-btn {
-  background: var(--panel);
-  border: 1px solid #2a2a2a;
-  border-radius: 12px;
-  padding: 8px;
-  cursor: pointer;
+  background:var(--panel);
+  border:1px solid #2a2a2a;
+  border-radius:12px;
+  padding:8px;
+  cursor:pointer;
 }
 
-.menu-btn img {
-  width: 26px;
-  height: 26px;
-}
+.menu-btn img { width:26px;height:26px; }
 
-/* MENU OVERLAY */
 .menu-overlay {
-  position: fixed;
-  inset: 0;
-  background: rgba(0,0,0,0.55);
-  backdrop-filter: blur(10px);
-  opacity: 0;
-  pointer-events: none;
-  transition: opacity .25s ease;
-  z-index: 10;
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,.55);
+  backdrop-filter:blur(10px);
+  opacity:0;
+  pointer-events:none;
+  transition:.25s;
 }
 
 .menu-overlay.open {
-  opacity: 1;
-  pointer-events: all;
+  opacity:1;
+  pointer-events:all;
 }
 
-/* MENU PANEL */
 .menu-panel {
-  position: absolute;
-  top: 80px;
-  left: 24px;
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
+  position:absolute;
+  top:80px;
+  left:24px;
+  display:flex;
+  flex-direction:column;
+  gap:12px;
 }
 
-/* INDIVIDUAL MENU ENTRY */
 .menu-panel a {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  background: var(--panel);
-  border: 1px solid #2a2a2a;
-  border-radius: 14px;
-  padding: 12px 16px;
-  color: var(--text);
-  text-decoration: none;
-  font-size: 1.05rem;
-  box-shadow: 0 10px 30px rgba(0,0,0,.5);
-}
-
-.menu-panel a:hover {
-  transform: translateY(-1px);
-  opacity: 0.9;
-}
-
-.menu-panel img {
-  width: 22px;
-  height: 22px;
+  display:flex;
+  align-items:center;
+  gap:12px;
+  background:var(--panel);
+  border:1px solid #2a2a2a;
+  border-radius:14px;
+  padding:12px 16px;
+  color:var(--text);
+  text-decoration:none;
 }
 
 /* MAIN */
-main {
-  flex: 1;
-  padding: 32px;
-}
+main { flex:1; padding:32px; }
 
 /* HERO */
 .hero {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  text-align: center;
-  padding: 80px 20px;
+  text-align:center;
+  padding:80px 20px;
 }
 
 .wavy {
-  font-size: clamp(3rem, 7vw, 5rem);
-  font-weight: 900;
-  color: var(--yellow);
+  font-size:clamp(3rem,7vw,5rem);
+  font-weight:900;
+  color:var(--yellow);
 }
 
 .wavy span {
-  display: inline-block;
-  animation: wave 2.2s ease-in-out infinite;
-  animation-delay: calc(var(--i) * 0.08s);
+  display:inline-block;
+  animation:wave 2.2s ease-in-out infinite;
+  animation-delay:calc(var(--i)*.08s);
 }
 
 @keyframes wave {
-  0%,100% { transform: translateY(0); }
-  50% { transform: translateY(-14px); }
+  0%,100%{transform:translateY(0)}
+  50%{transform:translateY(-14px)}
 }
 
 .hero p {
-  max-width: 600px;
-  margin: 24px auto;
-  color: var(--muted);
+  max-width:600px;
+  margin:24px auto;
+  color:var(--muted);
 }
 
 .hero button {
-  background: var(--yellow);
-  color: #000;
-  border: none;
-  padding: 14px 28px;
-  border-radius: 999px;
-  font-weight: 600;
-  cursor: pointer;
+  background:var(--yellow);
+  color:#000;
+  border:none;
+  padding:14px 28px;
+  border-radius:999px;
+  font-weight:600;
+  cursor:pointer;
 }
 
-/* INFO BAR */
+/* INFO */
 .info-bar {
-  margin-top: 64px;
-  width: 100%;
-  max-width: 1000px;
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-  gap: 24px;
+  margin-top:64px;
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+  gap:24px;
 }
 
 .info-card {
-  background: linear-gradient(180deg, rgba(255,255,255,.04), rgba(0,0,0,.4));
-  border-radius: 18px;
-  padding: 24px;
+  background:linear-gradient(180deg,rgba(255,255,255,.04),rgba(0,0,0,.4));
+  border-radius:18px;
+  padding:24px;
 }
 
-.info-card h3 {
-  margin-top: 0;
-  color: var(--yellow);
+.info-card h3 { color:var(--yellow); margin-top:0; }
+
+/* GAMES */
+.search {
+  width:100%;
+  max-width:420px;
+  margin-bottom:24px;
+  padding:12px 16px;
+  border-radius:12px;
+  border:1px solid #2a2a2a;
+  background:var(--panel);
+  color:var(--text);
 }
 
-/* GAMES GRID */
 .grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
-  gap: 24px;
+  display:grid;
+  grid-template-columns:repeat(auto-fill,minmax(180px,1fr));
+  gap:24px;
 }
 
 .card {
-  background: linear-gradient(180deg, rgba(255,255,255,.05), rgba(0,0,0,.3));
-  border-radius: 18px;
-  overflow: hidden;
-  cursor: pointer;
-  transition: transform .25s ease;
-}
-
-.card:hover {
-  transform: translateY(-6px);
+  background:linear-gradient(180deg,rgba(255,255,255,.05),rgba(0,0,0,.3));
+  border-radius:18px;
+  overflow:hidden;
+  cursor:pointer;
 }
 
 .card img {
-  width: 100%;
-  height: 140px;
-  object-fit: cover;
+  width:100%;
+  height:140px;
+  object-fit:cover;
 }
 
 .card-title {
-  padding: 12px;
-  text-align: center;
-  font-weight: 600;
+  padding:12px;
+  text-align:center;
+  font-weight:600;
 }
 
 /* GAME */
+.game-wrapper {
+  display:flex;
+  flex-direction:column;
+  height:calc(100vh - 160px);
+}
+
 .game-header {
-  display: flex;
-  align-items: center;
-  gap: 16px;
-  margin-bottom: 20px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  margin-bottom:12px;
 }
 
 .back-btn {
-  background: none;
-  border: none;
-  color: var(--yellow);
-  cursor: pointer;
+  background:none;
+  border:none;
+  color:var(--yellow);
+  cursor:pointer;
 }
 
-.game-container {
-  background: black;
-  border-radius: 18px;
-  overflow: hidden;
-  min-height: 600px;
+.game-frame {
+  flex:1;
+  background:black;
+  border-radius:18px;
+  overflow:hidden;
+}
+
+.game-frame iframe {
+  width:100%;
+  height:100%;
+  border:none;
 }
 
 /* FOOTER */
 footer {
-  text-align: center;
-  padding: 24px;
-  color: var(--muted);
-  font-size: .85rem;
+  text-align:center;
+  padding:24px;
+  color:var(--muted);
+  font-size:.85rem;
 }
 </style>
 </head>
@@ -254,134 +233,104 @@ footer {
 
 <div class="menu-overlay" id="menu">
   <div class="menu-panel">
-    <a href="#/" onclick="toggleMenu()">
-      <img src="https://i.postimg.cc/SQGGBxHV/home-(1).png"> home
-    </a>
-    <a href="#/games" onclick="toggleMenu()">
-      <img src="https://i.postimg.cc/7ZhXMrsL/game-controller.png"> games
-    </a>
+    <a href="#/" onclick="toggleMenu()">home</a>
+    <a href="#/games" onclick="toggleMenu()">games</a>
   </div>
 </div>
 
-<main id="app">loading…</main>
+<main id="app"></main>
 <footer>banana arcade</footer>
 
 <script>
-const GAME_JSON =
-"https://raw.githubusercontent.com/parcoil/lunaar-lite/refs/heads/main/json/games.json";
+const GAME_JSON="https://raw.githubusercontent.com/parcoil/lunaar-lite/refs/heads/main/json/games.json";
+const INJECT_ONLY="https://cdn.jsdelivr.net/gh/gn-math/html@main";
+const BLOCKED=["subway surfer","people playground","stone grass moving simulator","comments"];
 
-let games = [];
-let weather = "loading…";
+let games=[],weather="loading…",searchQuery="";
 
-function toggleMenu() {
-  document.getElementById("menu").classList.toggle("open");
-}
+function toggleMenu(){menu.classList.toggle("open");}
+function getTime(){return new Date().toLocaleTimeString([], {hour:'2-digit',minute:'2-digit'});}
 
-function getTime() {
-  return new Date().toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'});
-}
-
-navigator.geolocation.getCurrentPosition(pos => {
-  const { latitude, longitude } = pos.coords;
-  fetch(`https://api.open-meteo.com/v1/forecast?latitude=${latitude}&longitude=${longitude}&current_weather=true`)
-    .then(r => r.json())
-    .then(d => {
-      weather = `${Math.round(d.current_weather.temperature)}°C`;
-      updateInfo();
-    })
-    .catch(() => weather = "unavailable");
-});
-
-async function loadGames() {
-  const res = await fetch(GAME_JSON);
-  games = await res.json();
+async function loadGames(){
+  const res=await fetch(GAME_JSON);
+  const data=await res.json();
+  games=data.filter(g=>!BLOCKED.some(b=>g.name.toLowerCase().includes(b)));
   route();
 }
 
-function homePage() {
-  return `
-  <section class="hero">
-    <div class="wavy">
-      ${"banana arcade".split("").map((c,i)=>
-        `<span style="--i:${i}">${c===" "?"&nbsp;":c}</span>`
-      ).join("")}
-    </div>
-    <p>a modern arcade experience with clean design and instant play.</p>
-    <button onclick="location.hash='#/games'">browse games</button>
-
-    <div class="info-bar">
-      <div class="info-card">
-        <h3>time</h3>
-        <p id="time">${getTime()}</p>
-      </div>
-      <div class="info-card">
-        <h3>weather</h3>
-        <p id="weather">${weather}</p>
-      </div>
-      <div class="info-card">
-        <h3>games</h3>
-        <p>${games.length}</p>
-      </div>
-    </div>
-  </section>`;
+function homePage(){
+return `
+<section class="hero">
+<div class="wavy">${"banana arcade".split("").map((c,i)=>`<span style="--i:${i}">${c===" "?"&nbsp;":c}</span>`).join("")}</div>
+<p>a modern arcade experience with clean design and instant play.</p>
+<button onclick="location.hash='#/games'">browse games</button>
+<div class="info-bar">
+<div class="info-card"><h3>time</h3><p id="time">${getTime()}</p></div>
+<div class="info-card"><h3>weather</h3><p>${weather}</p></div>
+<div class="info-card"><h3>games</h3><p>${games.length}</p></div>
+</div>
+</section>`;
 }
 
-function gamesPage() {
-  return `
-  <div class="grid">
-    ${games.map((g,i)=>`
-      <div class="card" onclick="location.hash='#/game/${i}'">
-        <img src="${g.image}">
-        <div class="card-title">${g.name}</div>
-      </div>
-    `).join("")}
-  </div>`;
+function gamesPage(){
+const filtered=games.filter(g=>g.name.toLowerCase().includes(searchQuery));
+return `
+<input class="search" placeholder="search games…" oninput="searchQuery=this.value.toLowerCase();route()">
+<div class="grid">
+${filtered.map((g,i)=>`
+<div class="card" onclick="location.hash='#/game/${i}'">
+<img src="${g.image}">
+<div class="card-title">${g.name}</div>
+</div>`).join("")}
+</div>`;
 }
 
-async function gamePage(i) {
-  const g = games[i];
-  const id = "game-"+Date.now();
+async function gamePage(i){
+const g=games[i];
+const id="frame-"+Date.now();
 
-  setTimeout(async () => {
-    const el = document.getElementById(id);
-    try {
-      const res = await fetch(g.url);
-      el.innerHTML = await res.text();
-    } catch {
-      el.innerHTML = `<iframe width="1366" height="768" src="${g.url}" frameborder="0" allowfullscreen></iframe>`;
-    }
-  }, 50);
+setTimeout(async()=>{
+const iframe=document.getElementById(id);
+if(g.url.includes(INJECT_ONLY)){
+  const html=await fetch(g.url).then(r=>r.text());
+  const doc=iframe.contentWindow.document;
+  doc.open();doc.write(html);doc.close();
+}else{
+  iframe.src=g.url;
+}
+},50);
 
-  return `
-  <div>
-    <div class="game-header">
-      <button class="back-btn" onclick="location.hash='#/games'">← back</button>
-      <h2>${g.name}</h2>
-    </div>
-    <div class="game-container" id="${id}">loading…</div>
-  </div>`;
+return `
+<div class="game-wrapper">
+<div class="game-header">
+<button class="back-btn" onclick="location.hash='#/games'">← back</button>
+<button class="back-btn" onclick="toggleFullscreen('${id}')">fullscreen</button>
+</div>
+<div class="game-frame">
+<iframe id="${id}" src="about:blank" allowfullscreen></iframe>
+</div>
+</div>`;
 }
 
-async function route() {
-  const app = document.getElementById("app");
-  const hash = location.hash || "#/";
-  if (hash === "#/") app.innerHTML = homePage();
-  else if (hash === "#/games") app.innerHTML = gamesPage();
-  else if (hash.startsWith("#/game/"))
-    app.innerHTML = await gamePage(parseInt(hash.split("/")[2]));
+function toggleFullscreen(id){
+const el=document.getElementById(id);
+if(!document.fullscreenElement){
+  el.requestFullscreen();
+}else{
+  document.exitFullscreen();
+}
 }
 
-setInterval(() => {
-  const t = document.getElementById("time");
-  if (t) t.textContent = getTime();
-}, 1000);
-
-function updateInfo() {
-  const w = document.getElementById("weather");
-  if (w) w.textContent = weather;
+async function route(){
+const app=document.getElementById("app");
+const h=location.hash||"#/";
+if(h==="#/") app.innerHTML=homePage();
+else if(h==="#/games") app.innerHTML=gamesPage();
+else if(h.startsWith("#/game/")) app.innerHTML=await gamePage(parseInt(h.split("/")[2]));
 }
 
-window.addEventListener("hashchange", route);
+setInterval(()=>{const t=document.getElementById("time");if(t)t.textContent=getTime();},1000);
+window.addEventListener("hashchange",route);
 loadGames();
 </script>
 
