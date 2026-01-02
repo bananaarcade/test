@@ -56,7 +56,8 @@ header {
 .menu-btn img {
   width: 26px;
   height: 26px;
-  filter: invert(90%);
+  /* turn blue icon into banana yellow */
+  filter: brightness(0) saturate(100%) invert(85%) sepia(70%) saturate(600%) hue-rotate(360deg);
 }
 
 /* MENU OVERLAY */
@@ -81,9 +82,14 @@ header {
   position: absolute;
   top: 80px;
   left: 24px;
+  background: var(--panel);
+  border: 1px solid #2a2a2a;
+  border-radius: 16px;
+  padding: 14px 18px;
   display: flex;
   flex-direction: column;
   gap: 14px;
+  box-shadow: 0 20px 50px rgba(0,0,0,.6);
 }
 
 .menu-panel a {
@@ -92,7 +98,11 @@ header {
   gap: 12px;
   color: var(--text);
   text-decoration: none;
-  font-size: 1.1rem;
+  font-size: 1.05rem;
+}
+
+.menu-panel a:hover {
+  opacity: 0.85;
 }
 
 .menu-panel img {
@@ -265,17 +275,14 @@ const GAME_JSON =
 let games = [];
 let weather = "loading…";
 
-/* MENU */
 function toggleMenu() {
   document.getElementById("menu").classList.toggle("open");
 }
 
-/* TIME */
 function getTime() {
   return new Date().toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'});
 }
 
-/* WEATHER */
 navigator.geolocation.getCurrentPosition(pos => {
   const { latitude, longitude } = pos.coords;
   fetch(`https://api.open-meteo.com/v1/forecast?latitude=${latitude}&longitude=${longitude}&current_weather=true`)
@@ -287,14 +294,12 @@ navigator.geolocation.getCurrentPosition(pos => {
     .catch(() => weather = "unavailable");
 });
 
-/* LOAD GAMES */
 async function loadGames() {
   const res = await fetch(GAME_JSON);
   games = await res.json();
   route();
 }
 
-/* PAGES */
 function homePage() {
   return `
   <section class="hero">
@@ -359,7 +364,6 @@ async function gamePage(i) {
   </div>`;
 }
 
-/* ROUTER */
 async function route() {
   const app = document.getElementById("app");
   const hash = location.hash || "#/";
