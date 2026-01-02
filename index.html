@@ -56,8 +56,6 @@ header {
 .menu-btn img {
   width: 26px;
   height: 26px;
-  /* turn blue icon into banana yellow */
-  filter: brightness(0) saturate(100%) invert(85%) sepia(70%) saturate(600%) hue-rotate(360deg);
 }
 
 /* MENU OVERLAY */
@@ -82,27 +80,29 @@ header {
   position: absolute;
   top: 80px;
   left: 24px;
-  background: var(--panel);
-  border: 1px solid #2a2a2a;
-  border-radius: 16px;
-  padding: 14px 18px;
   display: flex;
   flex-direction: column;
-  gap: 14px;
-  box-shadow: 0 20px 50px rgba(0,0,0,.6);
+  gap: 12px;
 }
 
+/* INDIVIDUAL MENU ENTRY */
 .menu-panel a {
   display: flex;
   align-items: center;
   gap: 12px;
+  background: var(--panel);
+  border: 1px solid #2a2a2a;
+  border-radius: 14px;
+  padding: 12px 16px;
   color: var(--text);
   text-decoration: none;
   font-size: 1.05rem;
+  box-shadow: 0 10px 30px rgba(0,0,0,.5);
 }
 
 .menu-panel a:hover {
-  opacity: 0.85;
+  transform: translateY(-1px);
+  opacity: 0.9;
 }
 
 .menu-panel img {
@@ -150,7 +150,6 @@ main {
 }
 
 .hero button {
-  display: inline-flex;
   background: var(--yellow);
   color: #000;
   border: none;
@@ -265,7 +264,6 @@ footer {
 </div>
 
 <main id="app">loading…</main>
-
 <footer>banana arcade</footer>
 
 <script>
