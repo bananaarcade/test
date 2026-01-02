@@ -4,7 +4,6 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>banana arcade</title>
-
 <style>
 :root {
   --bg:#121212;
@@ -13,231 +12,54 @@
   --text:#f2f2f2;
   --muted:#a0a0a0;
 }
-
-* { box-sizing:border-box; font-family:Inter,system-ui,sans-serif; }
-
-body {
-  margin:0;
-  min-height:100vh;
-  display:flex;
-  flex-direction:column;
-  background:radial-gradient(1200px 600px at top,#1f1f1f,var(--bg));
-  color:var(--text);
-  overflow-x:hidden;
-}
-
-/* HEADER */
-header {
-  display:flex;
-  align-items:center;
-  gap:16px;
-  padding:18px 24px;
-}
-
-.logo { font-weight:800; }
-
-/* MENU */
-.menu-btn {
-  background:var(--panel);
-  border:1px solid #2a2a2a;
-  border-radius:12px;
-  padding:8px;
-  cursor:pointer;
-}
-
-.menu-btn img { width:26px;height:26px; }
-
-.menu-overlay {
-  position:fixed;
-  inset:0;
-  background:rgba(0,0,0,.55);
-  backdrop-filter:blur(10px);
-  opacity:0;
-  pointer-events:none;
-  transition:.25s;
-}
-
-.menu-overlay.open {
-  opacity:1;
-  pointer-events:all;
-}
-
-.menu-panel {
-  position:absolute;
-  top:80px;
-  left:24px;
-  display:flex;
-  flex-direction:column;
-  gap:12px;
-}
-
-.menu-panel a {
-  display:flex;
-  align-items:center;
-  gap:12px;
-  background:var(--panel);
-  border:1px solid #2a2a2a;
-  border-radius:14px;
-  padding:12px 16px;
-  color:var(--text);
-  text-decoration:none;
-}
-
-/* MAIN */
-main { flex:1; padding:32px; }
-
-/* HERO */
-.hero {
-  text-align:center;
-  padding:80px 20px;
-}
-
-.wavy {
-  font-size:clamp(3rem,7vw,5rem);
-  font-weight:900;
-  color:var(--yellow);
-}
-
-.wavy span {
-  display:inline-block;
-  animation:wave 2.2s ease-in-out infinite;
-  animation-delay:calc(var(--i)*.08s);
-}
-
-@keyframes wave {
-  0%,100%{transform:translateY(0)}
-  50%{transform:translateY(-14px)}
-}
-
-.hero p {
-  max-width:600px;
-  margin:24px auto;
-  color:var(--muted);
-}
-
-.hero button {
-  background:var(--yellow);
-  color:#000;
-  border:none;
-  padding:14px 28px;
-  border-radius:999px;
-  font-weight:600;
-  cursor:pointer;
-}
-
-/* INFO */
-.info-bar {
-  margin-top:64px;
-  display:grid;
-  grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
-  gap:24px;
-}
-
-.info-card {
-  background:linear-gradient(180deg,rgba(255,255,255,.04),rgba(0,0,0,.4));
-  border-radius:18px;
-  padding:24px;
-}
-
-.info-card h3 { color:var(--yellow); margin-top:0; }
-
-/* GAMES */
-.search {
-  width:100%;
-  max-width:420px;
-  margin-bottom:24px;
-  padding:12px 16px;
-  border-radius:12px;
-  border:1px solid #2a2a2a;
-  background:var(--panel);
-  color:var(--text);
-}
-
-.grid {
-  display:grid;
-  grid-template-columns:repeat(auto-fill,minmax(180px,1fr));
-  gap:24px;
-}
-
-.card {
-  background:linear-gradient(180deg,rgba(255,255,255,.05),rgba(0,0,0,.3));
-  border-radius:18px;
-  overflow:hidden;
-  cursor:pointer;
-}
-
-.card img {
-  width:100%;
-  height:140px;
-  object-fit:cover;
-}
-
-.card-title {
-  padding:12px;
-  text-align:center;
-  font-weight:600;
-}
-
-/* GAME */
-.game-wrapper {
-  display:flex;
-  flex-direction:column;
-  height:calc(100vh - 160px);
-}
-
-.game-header {
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  margin-bottom:12px;
-}
-
-.back-btn {
-  background:none;
-  border:none;
-  color:var(--yellow);
-  cursor:pointer;
-}
-
-.game-frame {
-  flex:1;
-  background:black;
-  border-radius:18px;
-  overflow:hidden;
-}
-
-.game-frame iframe {
-  width:100%;
-  height:100%;
-  border:none;
-}
-
-/* FOOTER */
-footer {
-  text-align:center;
-  padding:24px;
-  color:var(--muted);
-  font-size:.85rem;
-}
+*{box-sizing:border-box;font-family:Inter,system-ui,sans-serif;}
+body{margin:0;min-height:100vh;display:flex;flex-direction:column;background:radial-gradient(1200px 600px at top,#1f1f1f,var(--bg));color:var(--text);overflow-x:hidden;}
+header{display:flex;align-items:center;gap:16px;padding:18px 24px;}
+.logo{font-weight:800;}
+.menu-btn{background:var(--panel);border:1px solid #2a2a2a;border-radius:12px;padding:8px;cursor:pointer;}
+.menu-btn img{width:26px;height:26px;}
+.menu-overlay{position:fixed;inset:0;background:rgba(0,0,0,.55);backdrop-filter:blur(10px);opacity:0;pointer-events:none;transition:.25s;z-index:10;}
+.menu-overlay.open{opacity:1;pointer-events:all;}
+.menu-panel{position:absolute;top:80px;left:24px;display:flex;flex-direction:column;gap:12px;}
+.menu-panel a{display:flex;align-items:center;gap:12px;background:var(--panel);border:1px solid #2a2a2a;border-radius:14px;padding:12px 16px;color:var(--text);text-decoration:none;}
+main{flex:1;padding:32px;display:flex;flex-direction:column;}
+.hero{text-align:center;padding:80px 20px;}
+.wavy{font-size:clamp(3rem,7vw,5rem);font-weight:900;color:var(--yellow);}
+.wavy span{display:inline-block;animation:wave 2.2s ease-in-out infinite;animation-delay:calc(var(--i)*.08s);}
+@keyframes wave{0%,100%{transform:translateY(0)}50%{transform:translateY(-14px)}}
+.hero p{max-width:600px;margin:24px auto;color:var(--muted);}
+.hero button{background:var(--yellow);color:#000;border:none;padding:14px 28px;border-radius:999px;font-weight:600;cursor:pointer;}
+.info-wrap{max-width:1100px;margin:64px auto 0;padding:0 16px;}
+.info-bar{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:24px;}
+.info-card{background:linear-gradient(180deg,rgba(255,255,255,.04),rgba(0,0,0,.4));border-radius:18px;padding:24px;}
+.info-card h3{color:var(--yellow);margin-top:0;}
+.search{width:100%;max-width:420px;margin-bottom:24px;padding:12px 16px;border-radius:12px;border:1px solid #2a2a2a;background:var(--panel);color:var(--text);}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:24px;}
+.card{background:linear-gradient(180deg,rgba(255,255,255,.05),rgba(0,0,0,.3));border-radius:18px;overflow:hidden;cursor:pointer;}
+.card img{width:100%;height:140px;object-fit:cover;}
+.card-title{padding:12px;text-align:center;font-weight:600;}
+.game-page{flex:1;display:flex;flex-direction:column;}
+.game-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;gap:8px;}
+.icon-btn{display:flex;align-items:center;justify-content:center;background:var(--panel);border:1px solid #2a2a2a;border-radius:12px;padding:6px;cursor:pointer;}
+.icon-btn img{width:24px;height:24px;}
+.game-frame{flex:1;background:black;border-radius:18px;overflow:hidden;}
+.game-frame iframe{width:100%;height:100%;border:none;}
+footer{text-align:center;padding:24px;color:var(--muted);font-size:.85rem;}
 </style>
 </head>
-
 <body>
-
 <header>
   <button class="menu-btn" onclick="toggleMenu()">
     <img src="https://cdn-icons-png.flaticon.com/512/6482/6482621.png">
   </button>
   <div class="logo">banana arcade</div>
 </header>
-
 <div class="menu-overlay" id="menu">
   <div class="menu-panel">
     <a href="#/" onclick="toggleMenu()">home</a>
     <a href="#/games" onclick="toggleMenu()">games</a>
   </div>
 </div>
-
 <main id="app"></main>
 <footer>banana arcade</footer>
 
@@ -245,11 +67,29 @@ footer {
 const GAME_JSON="https://raw.githubusercontent.com/parcoil/lunaar-lite/refs/heads/main/json/games.json";
 const INJECT_ONLY="https://cdn.jsdelivr.net/gh/gn-math/html@main";
 const BLOCKED=["subway surfer","people playground","stone grass moving simulator","comments"];
-
-let games=[],weather="loading…",searchQuery="";
+let games=[],weather="loading…",search="";
 
 function toggleMenu(){menu.classList.toggle("open");}
 function getTime(){return new Date().toLocaleTimeString([], {hour:'2-digit',minute:'2-digit'});}
+function storagePatch(html){return `
+<script>
+(function(){
+const store={};
+window.localStorage={
+  getItem(k){parent.postMessage({type:'get',key:k},'*');return store[k]||null;},
+  setItem(k,v){store[k]=v;parent.postMessage({type:'set',key:k,value:v},'*');},
+  removeItem(k){delete store[k];},
+  clear(){for(let k in store)delete store[k];}
+};
+window.addEventListener("message",e=>{if(e.data?.type==='response')store[e.data.key]=e.data.value;});
+})();
+<\/script>
+`+html;}
+
+window.addEventListener("message", e=>{
+  const d=e.data||{};if(d.type==='get'){e.source.postMessage({type:'response',key:d.key,value:localStorage.getItem(d.key)},'*');}
+  if(d.type==='set'){localStorage.setItem(d.key,d.value);}
+});
 
 async function loadGames(){
   const res=await fetch(GAME_JSON);
@@ -264,47 +104,47 @@ return `
 <div class="wavy">${"banana arcade".split("").map((c,i)=>`<span style="--i:${i}">${c===" "?"&nbsp;":c}</span>`).join("")}</div>
 <p>a modern arcade experience with clean design and instant play.</p>
 <button onclick="location.hash='#/games'">browse games</button>
-<div class="info-bar">
-<div class="info-card"><h3>time</h3><p id="time">${getTime()}</p></div>
-<div class="info-card"><h3>weather</h3><p>${weather}</p></div>
-<div class="info-card"><h3>games</h3><p>${games.length}</p></div>
+<div class="info-wrap">
+  <div class="info-bar">
+    <div class="info-card"><h3>time</h3><p id="time">${getTime()}</p></div>
+    <div class="info-card"><h3>weather</h3><p>${weather}</p></div>
+    <div class="info-card"><h3>games</h3><p>${games.length}</p></div>
+  </div>
 </div>
 </section>`;
 }
 
 function gamesPage(){
-const filtered=games.filter(g=>g.name.toLowerCase().includes(searchQuery));
+const filtered=games.map((g,i)=>({g,i})).filter(x=>x.g.name.toLowerCase().includes(search));
 return `
-<input class="search" placeholder="search games…" oninput="searchQuery=this.value.toLowerCase();route()">
+<input class="search" placeholder="search games…" oninput="search=this.value.toLowerCase();route()">
 <div class="grid">
-${filtered.map((g,i)=>`
-<div class="card" onclick="location.hash='#/game/${i}'">
-<img src="${g.image}">
-<div class="card-title">${g.name}</div>
+${filtered.map(x=>`
+<div class="card" onclick="location.hash='#/game/${x.i}'">
+<img src="${x.g.image}">
+<div class="card-title">${x.g.name}</div>
 </div>`).join("")}
 </div>`;
 }
 
 async function gamePage(i){
-const g=games[i];
-const id="frame-"+Date.now();
-
+const g=games[i];const id="frame-"+Date.now();
 setTimeout(async()=>{
 const iframe=document.getElementById(id);
 if(g.url.includes(INJECT_ONLY)){
   const html=await fetch(g.url).then(r=>r.text());
-  const doc=iframe.contentWindow.document;
-  doc.open();doc.write(html);doc.close();
-}else{
-  iframe.src=g.url;
-}
+  iframe.srcdoc=storagePatch(html);
+}else iframe.src=g.url;
 },50);
-
 return `
-<div class="game-wrapper">
+<div class="game-page">
 <div class="game-header">
-<button class="back-btn" onclick="location.hash='#/games'">← back</button>
-<button class="back-btn" onclick="toggleFullscreen('${id}')">fullscreen</button>
+<button class="icon-btn back-btn" onclick="location.hash='#/games'">
+<img src="https://i.postimg.cc/K8dGmFCN/previous.png">
+</button>
+<button class="icon-btn" onclick="toggleFullscreen('${id}')">
+<img src="https://i.postimg.cc/Zn7m2hrn/fullscreen.png">
+</button>
 </div>
 <div class="game-frame">
 <iframe id="${id}" src="about:blank" allowfullscreen></iframe>
@@ -314,11 +154,7 @@ return `
 
 function toggleFullscreen(id){
 const el=document.getElementById(id);
-if(!document.fullscreenElement){
-  el.requestFullscreen();
-}else{
-  document.exitFullscreen();
-}
+if(!document.fullscreenElement) el.requestFullscreen(); else document.exitFullscreen();
 }
 
 async function route(){
@@ -333,6 +169,5 @@ setInterval(()=>{const t=document.getElementById("time");if(t)t.textContent=getT
 window.addEventListener("hashchange",route);
 loadGames();
 </script>
-
 </body>
 </html>
