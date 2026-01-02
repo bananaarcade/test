@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>banana arcade</title>
+
+<style>
+:root {
+  --bg: #121212;
+  --panel: #1a1a1a;
+  --card: #202020;
+  --yellow: #ffd84d;
+  --text: #f2f2f2;
+  --muted: #a0a0a0;
+}
+
+* {
+  box-sizing: border-box;
+  font-family: Inter, system-ui, sans-serif;
+}
+
+body {
+  margin: 0;
+  background: radial-gradient(1200px 600px at top, #1f1f1f, var(--bg));
+  color: var(--text);
+}
+
+/* HEADER */
+header {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 18px 24px;
+}
+
+.menu {
+  position: relative;
+}
+
+.menu-btn {
+  background: var(--panel);
+  border: 1px solid #2a2a2a;
+  color: var(--yellow);
+  padding: 10px 14px;
+  border-radius: 12px;
+  cursor: pointer;
+}
+
+.dropdown {
+  position: absolute;
+  top: 50px;
+  left: 0;
+  background: var(--panel);
+  border-radius: 14px;
+  box-shadow: 0 20px 50px rgba(0,0,0,.6);
+  display: none;
+  overflow: hidden;
+  min-width: 160px;
+}
+
+.dropdown a {
+  display: block;
+  padding: 12px 16px;
+  text-decoration: none;
+  color: var(--text);
+}
+
+.dropdown a:hover {
+  background: #262626;
+}
+
+.menu.open .dropdown {
+  display: block;
+}
+
+.logo {
+  font-weight: 800;
+}
+
+/* MAIN */
+main {
+  padding: 32px;
+}
+
+/* HERO */
+.hero {
+  text-align: center;
+  padding: 100px 20px 60px;
+}
+
+.wavy {
+  font-size: clamp(3rem, 7vw, 5rem);
+  font-weight: 900;
+  color: var(--yellow);
+}
+
+.wavy span {
+  display: inline-block;
+  animation: wave 2.2s ease-in-out infinite;
+  animation-delay: calc(var(--i) * 0.08s);
+}
+
+@keyframes wave {
+  0%,100% { transform: translateY(0); }
+  50% { transform: translateY(-14px); }
+}
+
+.hero p {
+  max-width: 600px;
+  margin: 24px auto;
+  color: var(--muted);
+}
+
+.hero button {
+  background: var(--yellow);
+  color: #000;
+  border: none;
+  padding: 14px 28px;
+  border-radius: 999px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+/* INFO BAR */
+.info-bar {
+  margin-top: 80px;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 24px;
+}
+
+.info-card {
+  background: linear-gradient(180deg, rgba(255,255,255,.04), rgba(0,0,0,.4));
+  border-radius: 18px;
+  padding: 24px;
+}
+
+.info-card h3 {
+  margin-top: 0;
+  color: var(--yellow);
+}
+
+/* GAMES GRID */
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: 24px;
+}
+
+.card {
+  background: linear-gradient(180deg, rgba(255,255,255,.05), rgba(0,0,0,.3));
+  border-radius: 18px;
+  overflow: hidden;
+  cursor: pointer;
+  transition: transform .25s ease;
+}
+
+.card:hover {
+  transform: translateY(-6px);
+}
+
+.card img {
+  width: 100%;
+  height: 140px;
+  object-fit: cover;
+}
+
+.card-title {
+  padding: 12px;
+  text-align: center;
+  font-weight: 600;
+}
+
+/* GAME PAGE */
+.game-header {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 20px;
+}
+
+.back-btn {
+  background: none;
+  border: none;
+  color: var(--yellow);
+  cursor: pointer;
+}
+
+.game-container {
+  background: black;
+  border-radius: 18px;
+  overflow: hidden;
+  min-height: 600px;
+}
+
+/* FOOTER */
+footer {
+  text-align: center;
+  padding: 28px;
+  color: var(--muted);
+  font-size: .85rem;
+}
+</style>
+</head>
+
+<body>
+
+<header>
+  <div class="menu">
+    <button class="menu-btn" onclick="toggleMenu()">☰</button>
+    <div class="dropdown">
+      <a href="#/">home</a>
+      <a href="#/games">games</a>
+    </div>
+  </div>
+  <div class="logo">banana arcade</div>
+</header>
+
+<main id="app">loading…</main>
+
+<footer>banana arcade</footer>
+
+<script>
+const GAME_JSON =
+"https://raw.githubusercontent.com/parcoil/lunaar-lite/refs/heads/main/json/games.json";
+
+let games = [];
+let weatherText = "loading…";
+
+/* MENU */
+function toggleMenu() {
+  document.querySelector(".menu").classList.toggle("open");
+}
+
+/* WEATHER (no API key) */
+fetch("https://wttr.in/?format=%C+%t")
+  .then(r => r.text())
+  .then(t => weatherText = t)
+  .catch(() => weatherText = "unavailable");
+
+/* TIME */
+function getTime() {
+  return new Date().toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'});
+}
+
+/* LOAD GAMES */
+async function loadGames() {
+  const res = await fetch(GAME_JSON);
+  games = await res.json();
+  route();
+}
+
+/* PAGES */
+function homePage() {
+  return `
+  <section class="hero">
+    <div class="wavy">
+      ${"banana arcade".split("").map((c,i)=>
+        `<span style="--i:${i}">${c===" "?"&nbsp;":c}</span>`
+      ).join("")}
+    </div>
+    <p>a modern arcade experience with clean design and instant play.</p>
+    <button onclick="location.hash='#/games'">browse games</button>
+
+    <div class="info-bar">
+      <div class="info-card">
+        <h3>time</h3>
+        <p id="time">${getTime()}</p>
+      </div>
+      <div class="info-card">
+        <h3>weather</h3>
+        <p id="weather">${weatherText}</p>
+      </div>
+      <div class="info-card">
+        <h3>games</h3>
+        <p>${games.length}</p>
+      </div>
+    </div>
+  </section>`;
+}
+
+function gamesPage() {
+  return `
+  <div class="grid">
+    ${games.map((g,i)=>`
+      <div class="card" onclick="location.hash='#/game/${i}'">
+        <img src="${g.image}">
+        <div class="card-title">${g.name}</div>
+      </div>
+    `).join("")}
+  </div>`;
+}
+
+async function gamePage(i) {
+  const g = games[i];
+  if (!g) return "not found";
+
+  const containerId = "game-" + Date.now();
+
+  setTimeout(async () => {
+    const el = document.getElementById(containerId);
+    try {
+      const res = await fetch(g.url);
+      const html = await res.text();
+      el.innerHTML = html;
+    } catch {
+      el.innerHTML = `
+      <iframe width="1366" height="768"
+        src="${g.url}"
+        title="${g.name}"
+        frameborder="0"
+        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+        referrerpolicy="strict-origin-when-cross-origin"
+        allowfullscreen></iframe>`;
+    }
+  }, 50);
+
+  return `
+  <div>
+    <div class="game-header">
+      <button class="back-btn" onclick="location.hash='#/games'">← back</button>
+      <h2>${g.name}</h2>
+    </div>
+    <div class="game-container" id="${containerId}">
+      loading game…
+    </div>
+  </div>`;
+}
+
+/* ROUTER */
+async function route() {
+  const app = document.getElementById("app");
+  document.querySelector(".menu").classList.remove("open");
+  const hash = location.hash || "#/";
+
+  if (hash === "#/") {
+    app.innerHTML = homePage();
+  } else if (hash === "#/games") {
+    app.innerHTML = gamesPage();
+  } else if (hash.startsWith("#/game/")) {
+    app.innerHTML = await gamePage(parseInt(hash.split("/")[2]));
+  }
+}
+
+window.addEventListener("hashchange", route);
+setInterval(() => {
+  const t = document.getElementById("time");
+  if (t) t.textContent = getTime();
+}, 1000);
+
+loadGames();
+</script>
+
+</body>
+</html>
