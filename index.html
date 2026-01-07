@@ -120,6 +120,22 @@ let games=[];
 function toggleMenu(){menu.classList.toggle("open");}
 function getTime(){return new Date().toLocaleTimeString([], {hour:'2-digit',minute:'2-digit'});}
 
+// Simple weather fetch for London (latitude, longitude)
+async function loadWeather(){
+  try{
+    const res = await fetch("https://api.open-meteo.com/v1/forecast?latitude=51.5074&longitude=-0.1278&current_weather=true");
+    const data = await res.json();
+    const temp = data.current_weather.temperature;
+    const weatherEl = document.querySelector(".info-card h3:contains('weather')")?.nextElementSibling || document.querySelector("#weather");
+    if(weatherEl) weatherEl.textContent = `${temp}°C`;
+  }catch(e){
+    console.error("Weather fetch failed", e);
+  }
+}
+loadWeather();
+setInterval(loadWeather, 10*60*1000); // update every 10 minutes
+
+
 window.addEventListener("message", e=>{
   const d=e.data||{};
   if(d.type==='get'){e.source.postMessage({type:'response',key:d.key,value:localStorage.getItem(d.key)},'*');}
@@ -157,7 +173,7 @@ return `
 <div class="info-wrap">
   <div class="info-bar">
     <div class="info-card"><h3>time</h3><p id="time">${getTime()}</p></div>
-    <div class="info-card"><h3>weather</h3><p>loading...</p></div>
+    <div class="info-card"><h3>weather</h3><p id="weather">loading…</p></div>
     <div class="info-card"><h3>games</h3><p>${games.length}</p></div>
   </div>
 </div>
