@@ -188,24 +188,77 @@ games.forEach((g,i)=>{
 html+='</div>'; return html;
 }
 
-async function gamePage(i){
-const g=games[i];
-const id="frame-"+Date.now();
-setTimeout(async()=>{
-  const iframe=document.getElementById(id);
-  if(g.url.includes(INJECT_ONLY)){
-    const html=await fetch(g.url).then(r=>r.text());
-    iframe.srcdoc=storagePatch(html);
-  }else iframe.src=g.url;
-},50);
-return `<div class="game-page">
-<div class="game-header">
-<button class="icon-btn" onclick="location.hash='#/games'"><img src="https://i.postimg.cc/K8dGmFCN/previous.png"></button>
-<button class="icon-btn" onclick="toggleFullscreen('${id}')"><img src="https://i.postimg.cc/Zn7m2hrn/fullscreen.png"></button>
-</div>
-<div class="game-frame"><iframe id="${id}" src="about:blank" allowfullscreen></iframe></div>
-</div>`;
+async function gamePage(i) {
+  const g = games[i];
+  const id = "frame-" + Date.now();
+
+  // HTML for the page with loading bar
+  const html = `
+    <div class="game-page">
+      <div class="game-header">
+        <button class="icon-btn" onclick="location.hash='#/games'">
+          <img src="https://i.postimg.cc/K8dGmFCN/previous.png">
+        </button>
+        <button class="icon-btn" onclick="toggleFullscreen('${id}')">
+          <img src="https://i.postimg.cc/Zn7m2hrn/fullscreen.png">
+        </button>
+      </div>
+      <div class="game-frame" style="display:flex;flex-direction:column;align-items:center;justify-content:center;">
+        <div id="loading-bar" style="width:70%;height:24px;border:1px solid #2a2a2a;border-radius:12px;overflow:hidden;background:#1a1a1a;margin-top:50px;">
+          <div id="progress" style="width:0%;height:100%;background:var(--yellow);transition:width 0.1s linear;"></div>
+        </div>
+        <p id="loading-text" style="margin-top:12px;color:var(--muted);">Loading game…</p>
+        <iframe id="${id}" src="about:blank" allowfullscreen style="width:100%;height:100%;display:none;border:none;border-radius:12px;"></iframe>
+      </div>
+    </div>
+  `;
+
+  // Set the HTML
+  document.getElementById("app").innerHTML = html;
+
+  const iframe = document.getElementById(id);
+  const progress = document.getElementById("progress");
+  const loadingText = document.getElementById("loading-text");
+
+  let loaded = false;
+
+  // Start loading progress animation for 7 seconds
+  let start = Date.now();
+  const interval = setInterval(() => {
+    const elapsed = Date.now() - start;
+    let percent = Math.min((elapsed / 7000) * 100, 100);
+    progress.style.width = percent + "%";
+  }, 50);
+
+  // Try to load the game
+  setTimeout(async () => {
+    try {
+      const htmlContent = await fetch(g.url).then(r => r.text());
+      if (g.url.includes(INJECT_ONLY)) {
+        iframe.srcdoc = storagePatch(htmlContent);
+      } else {
+        iframe.src = g.url;
+      }
+      iframe.onload = () => {
+        loaded = true;
+        iframe.style.display = "block";
+        progress.parentElement.style.display = "none";
+        clearInterval(interval);
+      };
+    } catch {
+      // If fetch fails, still try src
+      iframe.src = g.url;
+    }
+  }, 50);
+
+  // After 7 seconds, check if iframe is loaded
+  setTimeout(() => {
+    if (!loaded) {
+      loadingText.textContent = "The game should not be taking this long to load. Try refreshing with Ctrl+Shift+R.";
+    }
+  }, 7000);
 }
+
 
 function toggleFullscreen(id){const el=document.getElementById(id);if(!document.fullscreenElement) el.requestFullscreen(); else document.exitFullscreen();}
 async function route(){
