@@ -15,58 +15,14 @@
 }
 *{box-sizing:border-box;font-family:Inter,system-ui,sans-serif;}
 body{margin:0;min-height:100vh;display:flex;flex-direction:column;background:radial-gradient(1200px 600px at top,#1f1f1f,var(--bg));color:var(--text);overflow-x:hidden;}
-header{
-  display:flex;
-  align-items:center;
-  gap:16px;
-  padding:18px 24px;
-  position:relative;
-  z-index:20;
-}
+header{display:flex;align-items:center;gap:16px;padding:18px 24px;position:relative;z-index:20;}
 .logo{font-weight:800;}
-.menu-btn{
-  background:var(--panel);
-  border:1px solid #2a2a2a;
-  border-radius:12px;
-  padding:8px;
-  cursor:pointer;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  position:relative;
-  z-index:25;
-}
+.menu-btn{background:var(--panel);border:1px solid #2a2a2a;border-radius:12px;padding:8px;cursor:pointer;display:flex;align-items:center;justify-content:center;position:relative;z-index:25;}
 .menu-btn img{width:26px;height:26px;display:block;}
-.menu-overlay{
-  position:fixed;
-  inset:0;
-  background:rgba(0,0,0,.55);
-  backdrop-filter:blur(10px);
-  opacity:0;
-  pointer-events:none;
-  transition:.25s;
-  z-index:10;
-}
+.menu-overlay{position:fixed;inset:0;background:rgba(0,0,0,.55);backdrop-filter:blur(10px);opacity:0;pointer-events:none;transition:.25s;z-index:10;}
 .menu-overlay.open{opacity:1;pointer-events:all;}
-.menu-panel{
-  position:absolute;
-  top:80px;
-  left:24px;
-  display:flex;
-  flex-direction:column;
-  gap:12px;
-}
-.menu-panel a{
-  display:flex;
-  align-items:center;
-  gap:12px;
-  background:var(--panel);
-  border:1px solid #2a2a2a;
-  border-radius:14px;
-  padding:12px 16px;
-  color:var(--text);
-  text-decoration:none;
-}
+.menu-panel{position:absolute;top:80px;left:24px;display:flex;flex-direction:column;gap:12px;}
+.menu-panel a{display:flex;align-items:center;gap:12px;background:var(--panel);border:1px solid #2a2a2a;border-radius:14px;padding:12px 16px;color:var(--text);text-decoration:none;}
 .menu-panel a img{width:24px;height:24px;}
 main{flex:1;display:flex;flex-direction:column;overflow:auto;padding:32px;}
 .hero{text-align:center;padding:80px 20px;}
@@ -87,8 +43,9 @@ main{flex:1;display:flex;flex-direction:column;overflow:auto;padding:32px;}
 .game-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;gap:8px;}
 .icon-btn{display:flex;align-items:center;justify-content:center;background:var(--panel);border:1px solid #2a2a2a;border-radius:12px;padding:6px;cursor:pointer;}
 .icon-btn img{width:24px;height:24px;}
-.game-frame{flex:1 1 auto;border-radius:12px;overflow:hidden;}
+.game-frame{flex:1 1 auto;border-radius:12px;overflow:hidden;position:relative;}
 .game-frame iframe{width:100%;height:100%;border:none;}
+.fallback-message{position:absolute;top:50%;left:50%;transform:translate(-50%, -50%);color:#fff;text-align:center;font-size:1rem;}
 footer{text-align:center;padding:24px;color:var(--muted);font-size:.85rem;}
 </style>
 </head>
@@ -113,101 +70,77 @@ footer{text-align:center;padding:24px;color:var(--muted);font-size:.85rem;}
 
 <script>
 const GAME_JSON="https://raw.githubusercontent.com/bananaarcade/bananaarcade.github.io/refs/heads/main/games.json";
-const INJECT_ONLY="https://";
-const BLOCKED=["subway surfer","people playground","stone grass moving simulator","comments"];
 let games=[];
 
 function toggleMenu(){menu.classList.toggle("open");}
 function getTime(){return new Date().toLocaleTimeString([], {hour:'2-digit',minute:'2-digit'});}
 
-// Weather fetch
-async function loadWeather(){
-  try{
-    const res = await fetch("https://api.open-meteo.com/v1/forecast?latitude=51.5074&longitude=-0.1278&current_weather=true");
-    const data = await res.json();
-    const temp = data.current_weather.temperature;
-    const weatherEl = document.querySelector("#weather");
-    if(weatherEl) weatherEl.textContent = `${temp}°C`;
-  }catch(e){
-    console.error("Weather fetch failed", e);
-  }
-}
-loadWeather();
-setInterval(loadWeather, 10*60*1000);
-
-window.addEventListener("message", e=>{
-  const d=e.data||{};
-  if(d.type==='get'){e.source.postMessage({type:'response',key:d.key,value:localStorage.getItem(d.key)},'*');}
-  if(d.type==='set'){localStorage.setItem(d.key,d.value);}
-});
-
-function storagePatch(html){return `
-<script>
-(function(){
-const store={};
-window.localStorage={
-  getItem(k){parent.postMessage({type:'get',key:k},'*');return store[k]||null;},
-  setItem(k,v){store.postMessage({type:'set',key:k,value:v},'*');store[k]=v;},
-  removeItem(k){delete store[k];},
-  clear(){for(let k in store)delete store[k];}
-};
-window.addEventListener("message",e=>{if(e.data?.type==='response')store[e.data.key]=e.data.value;});
-})();
-<\/script>`+html;
-}
-
 async function loadGames(){
   const res=await fetch(GAME_JSON);
   const data=await res.json();
-  games=data.filter(g=>!BLOCKED.some(b=>g.name.toLowerCase().includes(b)));
+  games=data;
   route();
 }
 
 function homePage(){
   return `
-  <section class="hero">
-  <div class="wavy">${"banana arcade".split("").map((c,i)=>`<span style="--i:${i}">${c===" "?"&nbsp;":c}</span>`).join("")}</div>
-  <p>harry z was here!</p>
-  <button onclick="location.hash='#/games'">browse games</button>
-  <div class="info-wrap">
-    <div class="info-bar">
-      <div class="info-card"><h3>time</h3><p id="time">${getTime()}</p></div>
-      <div class="info-card"><h3>weather</h3><p id="weather">loading…</p></div>
-      <div class="info-card"><h3>games</h3><p>${games.length}</p></div>
-    </div>
+<section class="hero">
+<div class="wavy">${"banana arcade".split("").map((c,i)=>`<span style="--i:${i}">${c===" "?"&nbsp;":c}</span>`).join("")}</div>
+<p>a modern arcade experience with clean design and instant play.</p>
+<button onclick="location.hash='#/games'">browse games</button>
+<div class="info-wrap">
+  <div class="info-bar">
+    <div class="info-card"><h3>time</h3><p id="time">${getTime()}</p></div>
+    <div class="info-card"><h3>games</h3><p>${games.length}</p></div>
   </div>
-  </section>`;
+</div>
+</section>`;
 }
 
 function gamesPage(){
-  let html=`<div class="grid">`;
-  games.forEach((g,i)=>{
-    html+=`<div class="card" onclick="location.hash='#/game/${i}'"><img src="${g.image}"><div class="card-title">${g.name}</div></div>`;
-  });
-  html+='</div>';
-  return html;
+  return `<div class="grid">${games.map((g,i)=>`
+    <div class="card" onclick="location.hash='#/game/${i}'">
+      <img src="${g.image}">
+      <div class="card-title">${g.name}</div>
+    </div>
+  `).join('')}</div>`;
 }
 
 async function gamePage(i){
-  const g=games[i];
-  const id="frame-"+Date.now();
-  setTimeout(async()=>{
-    const iframe=document.getElementById(id);
-    if(g.url.includes(INJECT_ONLY)){
-      const html=await fetch(g.url).then(r=>r.text());
-      iframe.srcdoc=storagePatch(html);
-    }else iframe.src=g.url;
-  },50);
-  return `<div class="game-page">
+  const g = games[i];
+  const id = "frame-" + Date.now();
+
+  const html = `
+<div class="game-page">
   <div class="game-header">
     <button class="icon-btn" onclick="location.hash='#/games'"><img src="https://i.postimg.cc/K8dGmFCN/previous.png"></button>
     <button class="icon-btn" onclick="toggleFullscreen('${id}')"><img src="https://i.postimg.cc/Zn7m2hrn/fullscreen.png"></button>
   </div>
-  <div class="game-frame"><iframe id="${id}" src="about:blank" allowfullscreen></iframe></div>
-  </div>`;
+  <div class="game-frame">
+    <iframe id="${id}" src="${g.url}" allowfullscreen></iframe>
+    <div id="fallback-${id}" class="fallback-message" style="display:none;">
+      This game is taking too long to load. Try refreshing with Ctrl+Shift+R.
+    </div>
+  </div>
+</div>`;
+
+  // Check after 7 seconds if iframe is blank
+  setTimeout(() => {
+    const iframe = document.getElementById(id);
+    const fallback = document.getElementById(`fallback-${id}`);
+    if(iframe && iframe.contentDocument && iframe.contentDocument.body.innerHTML.trim() === ""){
+      iframe.style.display = "none";
+      fallback.style.display = "block";
+    }
+  }, 7000);
+
+  return html;
 }
 
-function toggleFullscreen(id){const el=document.getElementById(id);if(!document.fullscreenElement) el.requestFullscreen(); else document.exitFullscreen();}
+function toggleFullscreen(id){
+  const el=document.getElementById(id);
+  if(!document.fullscreenElement) el.requestFullscreen(); else document.exitFullscreen();
+}
 
 async function route(){
   const app=document.getElementById("app");
@@ -221,5 +154,6 @@ setInterval(()=>{const t=document.getElementById("time");if(t)t.textContent=getT
 window.addEventListener("hashchange",route);
 loadGames();
 </script>
+
 </body>
 </html>
