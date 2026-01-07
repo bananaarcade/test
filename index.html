@@ -21,7 +21,7 @@ header{
   gap:16px;
   padding:18px 24px;
   position:relative;
-  z-index:20; /* stays above overlay */
+  z-index:20;
 }
 .logo{font-weight:800;}
 .menu-btn{
@@ -34,7 +34,7 @@ header{
   align-items:center;
   justify-content:center;
   position:relative;
-  z-index:25; /* button always on top */
+  z-index:25;
 }
 .menu-btn img{width:26px;height:26px;display:block;}
 .menu-overlay{
@@ -120,21 +120,20 @@ let games=[];
 function toggleMenu(){menu.classList.toggle("open");}
 function getTime(){return new Date().toLocaleTimeString([], {hour:'2-digit',minute:'2-digit'});}
 
-// Simple weather fetch for London (latitude, longitude)
+// Weather fetch
 async function loadWeather(){
   try{
     const res = await fetch("https://api.open-meteo.com/v1/forecast?latitude=51.5074&longitude=-0.1278&current_weather=true");
     const data = await res.json();
     const temp = data.current_weather.temperature;
-    const weatherEl = document.querySelector(".info-card h3:contains('weather')")?.nextElementSibling || document.querySelector("#weather");
+    const weatherEl = document.querySelector("#weather");
     if(weatherEl) weatherEl.textContent = `${temp}°C`;
   }catch(e){
     console.error("Weather fetch failed", e);
   }
 }
 loadWeather();
-setInterval(loadWeather, 10*60*1000); // update every 10 minutes
-
+setInterval(loadWeather, 10*60*1000);
 
 window.addEventListener("message", e=>{
   const d=e.data||{};
@@ -165,76 +164,68 @@ async function loadGames(){
 }
 
 function homePage(){
-return `
-<section class="hero">
-<div class="wavy">${"banana arcade".split("").map((c,i)=>`<span style="--i:${i}">${c===" "?"&nbsp;":c}</span>`).join("")}</div>
-<p>harry z was here!</p>
-<button onclick="location.hash='#/games'">browse games</button>
-<div class="info-wrap">
-  <div class="info-bar">
-    <div class="info-card"><h3>time</h3><p id="time">${getTime()}</p></div>
-    <div class="info-card"><h3>weather</h3><p id="weather">loading…</p></div>
-    <div class="info-card"><h3>games</h3><p>${games.length}</p></div>
+  return `
+  <section class="hero">
+  <div class="wavy">${"banana arcade".split("").map((c,i)=>`<span style="--i:${i}">${c===" "?"&nbsp;":c}</span>`).join("")}</div>
+  <p>harry z was here!</p>
+  <button onclick="location.hash='#/games'">browse games</button>
+  <div class="info-wrap">
+    <div class="info-bar">
+      <div class="info-card"><h3>time</h3><p id="time">${getTime()}</p></div>
+      <div class="info-card"><h3>weather</h3><p id="weather">loading…</p></div>
+      <div class="info-card"><h3>games</h3><p>${games.length}</p></div>
+    </div>
   </div>
-</div>
-</section>`;
+  </section>`;
 }
 
 function gamesPage(){
-let html=`<div class="grid">`;
-games.forEach((g,i)=>{
-  html+=`<div class="card" onclick="location.hash='#/game/${i}'"><img src="${g.image}"><div class="card-title">${g.name}</div></div>`;
-});
-html+='</div>'; return html;
+  let html=`<div class="grid">`;
+  games.forEach((g,i)=>{
+    html+=`<div class="card" onclick="location.hash='#/game/${i}'"><img src="${g.image}"><div class="card-title">${g.name}</div></div>`;
+  });
+  html+='</div>';
+  return html;
 }
 
-async function gamePage(i) {
+// Updated game page with 7-second loading bar
+async function gamePage(i){
   const g = games[i];
   const id = "frame-" + Date.now();
-
-  // HTML for the page with loading bar
+  
   const html = `
-    <div class="game-page">
-      <div class="game-header">
-        <button class="icon-btn" onclick="location.hash='#/games'">
-          <img src="https://i.postimg.cc/K8dGmFCN/previous.png">
-        </button>
-        <button class="icon-btn" onclick="toggleFullscreen('${id}')">
-          <img src="https://i.postimg.cc/Zn7m2hrn/fullscreen.png">
-        </button>
-      </div>
-      <div class="game-frame" style="display:flex;flex-direction:column;align-items:center;justify-content:center;">
-        <div id="loading-bar" style="width:70%;height:24px;border:1px solid #2a2a2a;border-radius:12px;overflow:hidden;background:#1a1a1a;margin-top:50px;">
-          <div id="progress" style="width:0%;height:100%;background:var(--yellow);transition:width 0.1s linear;"></div>
-        </div>
-        <p id="loading-text" style="margin-top:12px;color:var(--muted);">Loading game…</p>
-        <iframe id="${id}" src="about:blank" allowfullscreen style="width:100%;height:100%;display:none;border:none;border-radius:12px;"></iframe>
-      </div>
+  <div class="game-page">
+    <div class="game-header">
+      <button class="icon-btn" onclick="location.hash='#/games'"><img src="https://i.postimg.cc/K8dGmFCN/previous.png"></button>
+      <button class="icon-btn" onclick="toggleFullscreen('${id}')"><img src="https://i.postimg.cc/Zn7m2hrn/fullscreen.png"></button>
     </div>
-  `;
-
-  // Set the HTML
+    <div class="game-frame" style="display:flex;flex-direction:column;align-items:center;justify-content:center;">
+      <div id="loading-bar" style="width:70%;height:24px;border:1px solid #2a2a2a;border-radius:12px;overflow:hidden;background:#1a1a1a;margin-top:50px;">
+        <div id="progress" style="width:0%;height:100%;background:var(--yellow);transition:width 0.1s linear;"></div>
+      </div>
+      <p id="loading-text" style="margin-top:12px;color:var(--muted);">Loading game…</p>
+      <iframe id="${id}" src="about:blank" allowfullscreen style="width:100%;height:100%;display:none;border:none;border-radius:12px;"></iframe>
+    </div>
+  </div>`;
+  
   document.getElementById("app").innerHTML = html;
-
+  
   const iframe = document.getElementById(id);
   const progress = document.getElementById("progress");
   const loadingText = document.getElementById("loading-text");
-
   let loaded = false;
-
-  // Start loading progress animation for 7 seconds
+  
   let start = Date.now();
-  const interval = setInterval(() => {
+  const interval = setInterval(()=>{
     const elapsed = Date.now() - start;
-    let percent = Math.min((elapsed / 7000) * 100, 100);
+    let percent = Math.min((elapsed/7000)*100,100);
     progress.style.width = percent + "%";
-  }, 50);
-
-  // Try to load the game
-  setTimeout(async () => {
-    try {
-      const htmlContent = await fetch(g.url).then(r => r.text());
-      if (g.url.includes(INJECT_ONLY)) {
+  },50);
+  
+  setTimeout(async()=>{
+    try{
+      const htmlContent = await fetch(g.url).then(r=>r.text());
+      if(g.url.includes(INJECT_ONLY)){
         iframe.srcdoc = storagePatch(htmlContent);
       } else {
         iframe.src = g.url;
@@ -245,29 +236,28 @@ async function gamePage(i) {
         progress.parentElement.style.display = "none";
         clearInterval(interval);
       };
-    } catch {
-      // If fetch fails, still try src
+    }catch{
       iframe.src = g.url;
     }
-  }, 50);
-
-  // After 7 seconds, check if iframe is loaded
-  setTimeout(() => {
-    if (!loaded) {
+  },50);
+  
+  setTimeout(()=>{
+    if(!loaded){
       loadingText.textContent = "The game should not be taking this long to load. Try refreshing with Ctrl+Shift+R.";
     }
-  }, 7000);
+  },7000);
 }
-
 
 function toggleFullscreen(id){const el=document.getElementById(id);if(!document.fullscreenElement) el.requestFullscreen(); else document.exitFullscreen();}
+
 async function route(){
-const app=document.getElementById("app");
-const h=location.hash||"#/";
-if(h==="#/") app.innerHTML=homePage();
-else if(h==="#/games") app.innerHTML=gamesPage();
-else if(h.startsWith("#/game/")) app.innerHTML=await gamePage(parseInt(h.split("/")[2]));
+  const app=document.getElementById("app");
+  const h=location.hash||"#/";
+  if(h==="#/") app.innerHTML=homePage();
+  else if(h==="#/games") app.innerHTML=gamesPage();
+  else if(h.startsWith("#/game/")) app.innerHTML=await gamePage(parseInt(h.split("/")[2]));
 }
+
 setInterval(()=>{const t=document.getElementById("time");if(t)t.textContent=getTime();},1000);
 window.addEventListener("hashchange",route);
 loadGames();
