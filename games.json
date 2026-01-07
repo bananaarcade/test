@@ -1,12 +1,5 @@
 [
   {
-    "name": "Bowmasters",
-    "image": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/0.png",
-    "url": "https://raw.githubusercontent.com/genizymath/genizymath.github.io/refs/heads/main/games/bowmasters/index.html",
-    "proxy": false,
-    "new": false
-  },
-  {
     "name": "OvO",
     "image": "https://cdn.jsdelivr.net/gh/gn-math/covers@main/1.png",
     "url": "https://raw.githubusercontent.com/genizymath/genizymath.github.io/refs/heads/main/iframe/1.html",
