@@ -14,7 +14,17 @@
   --muted:#a0a0a0;
 }
 *{box-sizing:border-box;font-family:Inter,system-ui,sans-serif;}
-body{margin:0;min-height:100vh;display:flex;flex-direction:column;background:radial-gradient(1200px 600px at top,#1f1f1f,var(--bg));color:var(--text);overflow-x:hidden;}
+body{
+  margin:0;
+  min-height:100vh;
+  display:flex;
+  flex-direction:column;
+  background:radial-gradient(1200px 600px at top,#1f1f1f,var(--bg));
+  color:var(--text);
+  overflow-x:hidden;
+}
+
+/* ---------------- Header ---------------- */
 header{
   display:flex;
   align-items:center;
@@ -36,27 +46,36 @@ header{
   position:relative;
   z-index:25;
 }
-.menu-btn img{width:26px;height:26px;display:block;}
-.menu-overlay{
-  position:fixed;
-  inset:0;
-  background:rgba(0,0,0,.55);
-  backdrop-filter:blur(10px);
-  opacity:0;
-  pointer-events:none;
-  transition:.25s;
-  z-index:10;
+.menu-btn img{width:24px;height:24px;display:block;}
+
+/* ---------------- Menu ---------------- */
+.menu-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.55);
+  backdrop-filter: blur(10px);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+  z-index: 1000;
 }
-.menu-overlay.open{opacity:1;pointer-events:all;}
-.menu-panel{
-  position:absolute;
-  top:80px;
-  left:24px;
-  display:flex;
-  flex-direction:column;
-  gap:12px;
+.menu-overlay.open { opacity:1; pointer-events: all; }
+.menu-panel {
+  position: fixed;
+  top:0;
+  left:-280px;
+  width:260px;
+  height:100%;
+  background: var(--panel);
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 60px 16px;
+  transition: left 0.3s ease;
+  box-shadow: 4px 0 12px rgba(0,0,0,0.4);
 }
-.menu-panel a{
+.menu-overlay.open .menu-panel { left:0; }
+.menu-panel a {
   display:flex;
   align-items:center;
   gap:12px;
@@ -66,30 +85,95 @@ header{
   padding:12px 16px;
   color:var(--text);
   text-decoration:none;
+  transition: transform 0.2s ease, background 0.2s ease, box-shadow 0.2s ease;
 }
-.menu-panel a img{width:24px;height:24px;}
+.menu-panel a img {
+  width:20px;
+  height:20px;
+  transition: transform 0.2s ease;
+}
+.menu-panel a:hover {
+  background: rgba(255,216,77,0.1);
+  transform: translateX(4px);
+  box-shadow: 0 0 10px rgba(255,216,77,0.6);
+}
+.menu-panel a:hover img {
+  transform: scale(1.2);
+}
+
+/* ---------------- Hero ---------------- */
 main{flex:1;display:flex;flex-direction:column;overflow:auto;padding:32px;}
-.hero{text-align:center;padding:80px 20px;}
-.wavy{font-size:clamp(3rem,7vw,5rem);font-weight:900;color:var(--yellow);}
+.hero{text-align:center;padding:80px 20px;position:relative;}
+.wavy{position:relative; z-index:1; font-size:clamp(3rem,7vw,5rem);font-weight:900;color:var(--yellow);}
 .wavy span{display:inline-block;animation:wave 2.2s ease-in-out infinite;animation-delay:calc(var(--i)*.08s);}
 @keyframes wave{0%,100%{transform:translateY(0)}50%{transform:translateY(-14px)}}
 .hero p{max-width:600px;margin:24px auto;color:var(--muted);}
 .hero button{background:var(--yellow);color:#000;border:none;padding:14px 28px;border-radius:999px;font-weight:600;cursor:pointer;}
+
+/* ---------------- Info ---------------- */
 .info-wrap{max-width:1100px;margin:64px auto 0;padding:0 16px;}
 .info-bar{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:24px;}
 .info-card{background:linear-gradient(180deg,rgba(255,255,255,.04),rgba(0,0,0,.4));border-radius:18px;padding:24px;}
 .info-card h3{color:var(--yellow);margin-top:0;}
+
+/* ---------------- Grid ---------------- */
 .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:24px;}
-.card{background:linear-gradient(180deg,rgba(255,255,255,.05),rgba(0,0,0,.3));border-radius:18px;overflow:hidden;cursor:pointer;}
-.card img{width:100%;height:140px;object-fit:cover;}
-.card-title{padding:12px;text-align:center;font-weight:600;}
+.card{
+  background: linear-gradient(180deg, rgba(255,255,255,.05), rgba(0,0,0,.3));
+  border-radius: 18px;
+  overflow: hidden;
+  cursor: pointer;
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+.card img{
+  width:100%;
+  height:140px;
+  object-fit:cover;
+  transition: transform 0.3s ease, filter 0.3s ease;
+}
+.card:hover{
+  transform: translateY(-6px) scale(1.03);
+  box-shadow:0 12px 20px rgba(0,0,0,0.45);
+}
+.card:hover img{
+  transform: scale(1.05);
+  filter: brightness(1.1);
+}
+.card-title{
+  padding:12px;
+  text-align:center;
+  font-weight:600;
+  transition: color 0.3s ease;
+}
+.card:hover .card-title{color: var(--yellow);}
+
+/* ---------------- Game page ---------------- */
 .game-page{display:flex;flex-direction:column;height:100vh;padding:16px;}
 .game-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;gap:8px;}
-.icon-btn{display:flex;align-items:center;justify-content:center;background:var(--panel);border:1px solid #2a2a2a;border-radius:12px;padding:6px;cursor:pointer;}
-.icon-btn img{width:24px;height:24px;}
+.icon-btn{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  background:var(--panel);
+  border:1px solid #2a2a2a;
+  border-radius:12px;
+  padding:6px;
+  cursor:pointer;
+}
+.icon-btn img{
+  width:20px;
+  height:20px;
+  transition: transform 0.2s ease;
+}
+.icon-btn:hover img{
+  transform: scale(1.25);
+}
 .game-frame{flex:1 1 auto;border-radius:12px;overflow:hidden;}
 .game-frame iframe{width:100%;height:100%;border:none;}
-footer{text-align:center;padding:24px;color:var(--muted);font-size:.85rem;}
+
+/* ---------------- Footer ---------------- */
+footer{text-align:center;padding:24px;color:var(--muted);font-size:.85rem;transition: text-shadow 0.3s ease;}
+footer:hover{text-shadow:0 0 8px rgba(255,216,77,0.5);}
 </style>
 </head>
 <body>
@@ -103,8 +187,8 @@ footer{text-align:center;padding:24px;color:var(--muted);font-size:.85rem;}
 
 <div class="menu-overlay" id="menu">
   <div class="menu-panel">
-    <a href="#/" onclick="toggleMenu()"><img src="https://i.postimg.cc/SQGGBxHV/home-(1).png">home</a>
-    <a href="#/games" onclick="toggleMenu()"><img src="https://i.postimg.cc/7ZhXMrsL/game-controller.png">games</a>
+    <a href="#/" onclick="closeMenu()"><img src="https://i.postimg.cc/SQGGBxHV/home-(1).png">home</a>
+    <a href="#/games" onclick="closeMenu()"><img src="https://i.postimg.cc/7ZhXMrsL/game-controller.png">games</a>
   </div>
 </div>
 
@@ -117,77 +201,75 @@ const INJECT_ONLY="https://";
 const BLOCKED=["subway surfer","people playground","stone grass moving simulator","comments"];
 let games=[];
 
-function toggleMenu(){menu.classList.toggle("open");}
-function getTime(){return new Date().toLocaleTimeString([], {hour:'2-digit',minute:'2-digit'});}
+/* ---------------- Menu JS ---------------- */
+const menu = document.getElementById('menu');
+const menuPanel = menu.querySelector('.menu-panel');
+function toggleMenu(){ menu.classList.toggle('open'); }
+function closeMenu(){ menu.classList.remove('open'); }
+menu.addEventListener('click', e=>{ if(e.target === menu) closeMenu(); });
+document.addEventListener('keydown', e=>{ if(e.key==='Escape') closeMenu(); });
 
-// Weather fetch
+/* ---------------- Time + Weather ---------------- */
+function getTime(){return new Date().toLocaleTimeString([], {hour:'2-digit',minute:'2-digit'});}
 async function loadWeather(){
+  const weatherEl = document.querySelector("#weather");
+  if(!weatherEl) return;
   try{
     const res = await fetch("https://api.open-meteo.com/v1/forecast?latitude=51.5074&longitude=-0.1278&current_weather=true");
+    if(!res.ok) throw new Error("Weather API error");
     const data = await res.json();
-    const temp = data.current_weather.temperature;
-    const weatherEl = document.querySelector("#weather");
-    if(weatherEl) weatherEl.textContent = `${temp}°C`;
-  }catch(e){
+    const temp = data?.current_weather?.temperature;
+    const wind = data?.current_weather?.windspeed;
+    if(temp !== undefined && wind !== undefined){
+      weatherEl.textContent = `${temp}°C, ${wind} km/h`;
+    } else {
+      weatherEl.textContent = "N/A";
+    }
+  } catch(e){
     console.error("Weather fetch failed", e);
+    weatherEl.textContent = "N/A";
   }
 }
 loadWeather();
 setInterval(loadWeather, 10*60*1000);
 
+/* ---------------- Storage patch ---------------- */
 window.addEventListener("message", e=>{
   const d=e.data||{};
   if(d.type==='get'){e.source.postMessage({type:'response',key:d.key,value:localStorage.getItem(d.key)},'*');}
   if(d.type==='set'){localStorage.setItem(d.key,d.value);}
 });
+function storagePatch(html){return `<script>(function(){const store={};window.localStorage={getItem(k){parent.postMessage({type:'get',key:k},'*');return store[k]||null;},setItem(k,v){store.postMessage({type:'set',key:k,value:v},'*');store[k]=v;},removeItem(k){delete store[k];},clear(){for(let k in store)delete store[k];}};window.addEventListener("message",e=>{if(e.data?.type==='response')store[e.data.key]=e.data.value;});})();<\/script>`+html;}
 
-function storagePatch(html){return `
-<script>
-(function(){
-const store={};
-window.localStorage={
-  getItem(k){parent.postMessage({type:'get',key:k},'*');return store[k]||null;},
-  setItem(k,v){store.postMessage({type:'set',key:k,value:v},'*');store[k]=v;},
-  removeItem(k){delete store[k];},
-  clear(){for(let k in store)delete store[k];}
-};
-window.addEventListener("message",e=>{if(e.data?.type==='response')store[e.data.key]=e.data.value;});
-})();
-<\/script>`+html;
-}
-
+/* ---------------- Load Games ---------------- */
 async function loadGames(){
-  const res=await fetch(GAME_JSON);
-  const data=await res.json();
-  games=data.filter(g=>!BLOCKED.some(b=>g.name.toLowerCase().includes(b)));
+  const res = await fetch(GAME_JSON);
+  const data = await res.json();
+  games = data.filter(g=>!BLOCKED.some(b=>g.name.toLowerCase().includes(b)));
   route();
 }
 
+/* ---------------- Pages ---------------- */
 function homePage(){
-  return `
-  <section class="hero">
-  <div class="wavy">${"banana arcade".split("").map((c,i)=>`<span style="--i:${i}">${c===" "?"&nbsp;":c}</span>`).join("")}</div>
-  <p>harry z was here!</p>
-  <button onclick="location.hash='#/games'">browse games</button>
-  <div class="info-wrap">
-    <div class="info-bar">
-      <div class="info-card"><h3>time</h3><p id="time">${getTime()}</p></div>
-      <div class="info-card"><h3>weather</h3><p id="weather">loading…</p></div>
-      <div class="info-card"><h3>games</h3><p>${games.length}</p></div>
+  return `<section class="hero">
+    <div class="wavy">${"banana arcade".split("").map((c,i)=>`<span style="--i:${i}">${c===" "?"&nbsp;":c}</span>`).join("")}</div>
+    <p>harry z was here!</p>
+    <button onclick="location.hash='#/games'">browse games</button>
+    <div class="info-wrap">
+      <div class="info-bar">
+        <div class="info-card"><h3>time</h3><p id="time">${getTime()}</p></div>
+        <div class="info-card"><h3>weather</h3><p id="weather">loading…</p></div>
+        <div class="info-card"><h3>games</h3><p>${games.length}</p></div>
+      </div>
     </div>
-  </div>
   </section>`;
 }
-
 function gamesPage(){
   let html=`<div class="grid">`;
-  games.forEach((g,i)=>{
-    html+=`<div class="card" onclick="location.hash='#/game/${i}'"><img src="${g.image}"><div class="card-title">${g.name}</div></div>`;
-  });
+  games.forEach((g,i)=>{ html+=`<div class="card" onclick="location.hash='#/game/${i}'"><img src="${g.image}"><div class="card-title">${g.name}</div></div>`; });
   html+='</div>';
   return html;
 }
-
 async function gamePage(i){
   const g=games[i];
   const id="frame-"+Date.now();
@@ -199,16 +281,16 @@ async function gamePage(i){
     }else iframe.src=g.url;
   },50);
   return `<div class="game-page">
-  <div class="game-header">
-    <button class="icon-btn" onclick="location.hash='#/games'"><img src="https://i.postimg.cc/K8dGmFCN/previous.png"></button>
-    <button class="icon-btn" onclick="toggleFullscreen('${id}')"><img src="https://i.postimg.cc/Zn7m2hrn/fullscreen.png"></button>
-  </div>
-  <div class="game-frame"><iframe id="${id}" src="about:blank" allowfullscreen></iframe></div>
+    <div class="game-header">
+      <button class="icon-btn" onclick="location.hash='#/games'"><img src="https://i.postimg.cc/K8dGmFCN/previous.png"></button>
+      <button class="icon-btn" onclick="toggleFullscreen('${id}')"><img src="https://i.postimg.cc/Zn7m2hrn/fullscreen.png"></button>
+    </div>
+    <div class="game-frame"><iframe id="${id}" src="about:blank" allowfullscreen></iframe></div>
   </div>`;
 }
 
+/* ---------------- Route + Fullscreen ---------------- */
 function toggleFullscreen(id){const el=document.getElementById(id);if(!document.fullscreenElement) el.requestFullscreen(); else document.exitFullscreen();}
-
 async function route(){
   const app=document.getElementById("app");
   const h=location.hash||"#/";
